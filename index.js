@@ -4,11 +4,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 
 mongoose.connect(
-  "mongodb://admin:reacteur123@ds117334.mlab.com:17334/todo-reacteur",
-  // { useNewUrlParser: true },
-  function(err) {
-    if (err) throw err;
-  }
+  process.env.MONGODB_MLAB || "mongodb://localhost:27170",
+  { useNewUrlParser: true }
 );
 
 var db = mongoose.connection;
