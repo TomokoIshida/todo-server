@@ -5,14 +5,14 @@ const cors = require("cors");
 
 mongoose.connect(
   "mongodb://admin:reacteur123@ds117334.mlab.com:17334/todo-reacteur",
-  { useNewUrlParser: true },
+  // { useNewUrlParser: true },
   function(err) {
     if (err) throw err;
   }
 );
 
 var db = mongoose.connection;
-db.on("error", console.error.bind(console, "connection error:"));
+db.on("error", console.error.bind(console, "Connection error:"));
 db.once("open", function() {
   console.log("Connected successfully to database");
 });
@@ -38,15 +38,27 @@ app.post("/createTodo", function(req, res) {
     title
   });
 
-  newTodo.save();
+  newTodo.save((err, obj) => {
+    if (!err) {
+      console.log(obj);
+      return res.send("OK");
+    }
+    return res.json(err);
+  });
 
-  res.send("OK");
+  /* newTodo.save();
+  res.send("ok"); */
 });
 
-app.get("/getTodo", function(req, res) {
+app.get("/getTodos", function(req, res) {
   TodoModel.find(function(err, todos) {
-    if (err) return console.error(err);
-    res.send(todos);
+    if (!err) {
+      console.log(todos);
+      return res.send("Todos");
+    }
+    return res.json(err);
+    // if (err) return console.error(err);
+    //   res.send(todos);
   });
 });
 
